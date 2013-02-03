@@ -1,15 +1,145 @@
+/*
+ * Copyright 2013 Dr Daniel R Naylor.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package uk.co.drnaylor.moneysigns;
 
+import org.bukkit.ChatColor;
+import org.bukkit.block.Sign;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerEventHandler implements Listener {
     
     // Player Join - open MoneyUser class for him/her
-    
+    @EventHandler
+    public void OnPlayerJoin(PlayerJoinEvent event) {
+        MoneyUser a = new MoneyUser(event.getPlayer());
+        MoneySigns.users.put(event.getPlayer(), a);
+    }
     
     // Player Quit - close MoneyUser class and save file
-    
+    @EventHandler
+    public void OnPlayerQuit(PlayerQuitEvent event) {
+        MoneyUser a = MoneySigns.users.get(event.getPlayer());
+        a.saveConfig();
+        MoneySigns.users.remove(event.getPlayer());
+    }
     
     // PlayerInteractEvent - signs!
+    @EventHandler
+    public void OnPlayerInteract(PlayerInteractEvent event) {
+        
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+            if (event.getClickedBlock() instanceof Sign) {
+                Sign sign = (Sign)event.getClickedBlock();
+                if (sign.getLine(0).equalsIgnoreCase(ChatColor.GREEN + "[MoneyPrize]")) {
+                    MoneyUser mu = MoneySigns.users.get(event.getPlayer());
+                    if (!event.getPlayer().hasPermission("moneysigns.signs.use") || mu.canGetPrizes()) {
+                        event.setCancelled(true);
+                        event.getPlayer().sendMessage(ChatColor.RED + "You cannot use this sign!");
+                    }
+                    
+                    String identifier = sign.getLine(2);
+                    if (!MoneySigns.plugin.checkIdentifier(identifier)) {
+                        event.setCancelled(true);
+                        event.getPlayer().sendMessage(ChatColor.RED + "Identifier not found!");
+                        return;
+                    }
+                                      
+                    if (mu.canGetPrize(identifier)) {
+                        try {
+                            mu.claimPrize(identifier, Integer.valueOf(sign.getLine(1)));
+                        }
+                        catch (Exception e) {
+                            e.printStackTrace();
+                            event.getPlayer().sendMessage(ChatColor.RED + "An error occured - maybe the sign is malformed?");
+                        }
+                    } 
+                    else {
+                        long ttl = mu.getTimeToWait(identifier);
+                        event.getPlayer().sendMessage(ChatColor.RED + "You must wait for " + Util.toDuration(ttl) + " before you may use that sign again.");
+                    }
+                }
+            }
+        }
+    }
     
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void OnBlockPlace(BlockBreakEvent event) {
+            if (event.getBlock() instanceof Sign) {
+                Sign sign = (Sign)event.getBlock();
+                if (sign.getLine(0).equalsIgnoreCase(ChatColor.GREEN + "[MoneyPrize]")) {
+                    if (!event.getPlayer().hasPermission("moneysigns.signs.remove")) {
+                        event.setCancelled(true);
+                        event.getPlayer().sendMessage(ChatColor.RED + "You cannot remove this sign!");
+                    }
+                }
+            }
+    }
+    
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void OnBlockPlace(BlockPlaceEvent event) {
+        if (event.getBlockPlaced() instanceof Sign) {
+            Sign sign = (Sign)event.getBlockPlaced();
+            if (sign.getLine(0).toLowerCase().contains("[moneyprize]")) {
+                if (!event.getPlayer().hasPermission("moneysigns.signs.create")) {
+                    event.setCancelled(true);
+                    event.getPlayer().sendMessage(ChatColor.RED + "You do not have permission to create this sign!");
+                    return;
+                }
+                
+                String line1 = sign.getLine(1);
+                int amount;
+                try {
+                    amount = Integer.valueOf(line1);
+                }
+                catch (NumberFormatException e) {
+                    event.setCancelled(true);
+                    event.getPlayer().sendMessage(ChatColor.RED + "The second line must be a positive integer!");
+                    return;
+                }
+                
+                if (amount <= 0) {
+                    event.setCancelled(true);
+                    event.getPlayer().sendMessage(ChatColor.RED + "The second line must be a positive integer!");
+                    return;
+                }
+                
+                String identifier = sign.getLine(2);
+                if (!MoneySigns.plugin.checkIdentifier(identifier)) {
+                    event.setCancelled(true);
+                    event.getPlayer().sendMessage(ChatColor.RED + "The third line must be a identifier! (add it with /msid set <id> <timeout>)");                    
+                    return;
+                }
+
+                sign.setLine(0, ChatColor.GREEN + "[MoneyPrize]");
+                event.getPlayer().sendMessage(ChatColor.RED + "Sign created succesfully!");                    
+            }
+        }
+    }
 }

@@ -21,14 +21,71 @@
  */
 package uk.co.drnaylor.moneysigns.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import uk.co.drnaylor.moneysigns.MoneySigns;
+import uk.co.drnaylor.moneysigns.Util;
 
 public class Commandmsid implements CommandExecutor {
 
-    public boolean onCommand(CommandSender cs, Command cmnd, String string, String[] strings) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    // For /msid
+    public boolean onCommand(CommandSender sender, Command cmd, String string, String[] args) {
+        if (args.length == 2) {
+            if (args[0].equalsIgnoreCase("get")) {
+                if (MoneySigns.plugin.getConfig().isLong("timeouts." + args[1].toLowerCase())) {
+                    sender.sendMessage(ChatColor.GREEN + "Identifier: " + args[1].toLowerCase() + " - Timeout: " + Util.toDuration(MoneySigns.plugin.getConfig().getLong("timeouts." + args[1].toLowerCase())));
+                }
+                else {
+                    sender.sendMessage(ChatColor.RED + "Identifier " + args[1].toLowerCase() + " does not exist!");
+                }
+                return true;
+            }
+            else if (args[0].equalsIgnoreCase("remove")) {
+                if (MoneySigns.plugin.getConfig().isSet("timeouts." + args[1].toLowerCase())) {
+                    MoneySigns.plugin.getConfig().set("timeouts." + args[1].toLowerCase(), null);
+                    sender.sendMessage(ChatColor.GREEN + "Identifier " + args[1].toLowerCase() + " removed");
+                }
+                else {
+                    sender.sendMessage(ChatColor.RED + "Identifier " + args[1].toLowerCase() + " does not exist!");
+                }
+                return true;
+            }
+            printUsage(sender);
+            return true;
+        }
+        else if (args.length == 3 && args[0].equalsIgnoreCase("set")) {
+            long timeout;
+            try {
+                timeout = Long.valueOf(args[2]);
+            }
+            catch (NumberFormatException e) {
+                // Invalid number - throw it out
+                sender.sendMessage(ChatColor.RED + "The timeout must be a number (in seconds)");
+                return true;
+            }
+            MoneySigns.plugin.getConfig().set("timeouts." + args[1].toLowerCase(), timeout);  
+            sender.sendMessage(ChatColor.GREEN + "Identifier " + args[1].toLowerCase() + " has been created with a timeout of " + Util.toDuration(timeout));
+            MoneySigns.plugin.saveConfig();
+            return true;
+        }
+        else {
+            printUsage(sender);
+            return true;
+        }
+    }
+    
+   /**
+    * Prints the command usage for /msid.
+    * 
+    * @param sender CommandSender that needs the message!
+    */
+    private void printUsage(CommandSender sender) {
+        sender.sendMessage(ChatColor.AQUA + "/msid Usage");
+        sender.sendMessage(ChatColor.YELLOW + "/msid get <id> " + ChatColor.GREEN + "- Get timeout for the identifier <id>");
+        sender.sendMessage(ChatColor.YELLOW + "/msid set <id> <timeout>" + ChatColor.GREEN + "- Set timeout (in seconds) for the identifier <id>");
+        sender.sendMessage(ChatColor.YELLOW + "/msid remove <id>" + ChatColor.GREEN + "- Remove identifier <id>");
     }
     
 }

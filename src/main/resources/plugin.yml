@@ -2,3 +2,9 @@ name: MoneySigns
 main: uk.co.drnaylor.moneysigns.MoneySigns
 version: maven-version-number
 depends: [Vault]
+commands:
+  msid:
+    description: Sets, gets and removes stored identifiers
+    usage: /msid <get|set|remove> [identifier] [timeout]
+    permission: moneysigns.command.msid
+    permission-message: You don't have permission to perform that command!
