@@ -52,7 +52,7 @@
   </repositories>
 
   <build>
-      <finalName>loginFly</finalName>   
+      <finalName>moneysigns</finalName>   
       <plugins>
           <plugin>
               <groupId>com.google.code.maven-replacer-plugin</groupId>

@@ -27,6 +27,7 @@ public class MoneyUser {
     
     final Player player;
     
+    
     public MoneyUser(Player a)
     {
         this.player = a;
