@@ -56,8 +56,15 @@ public class MoneySigns extends JavaPlugin
 
         getCommand("msid").setExecutor(mainCE);
         getServer().getPluginManager().registerEvents(eventHandler, this);
+        
+        for (Player p : this.getServer().getOnlinePlayers()) {
+            if (!users.containsKey(p)) {
+                MoneyUser mu = new MoneyUser(p);
+                users.put(p, mu);
+            }
+        }
     }
-
+    
     private boolean setupPermissions()
     {
         RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
