@@ -24,7 +24,7 @@ package uk.co.drnaylor.moneysigns;
 public abstract class Util {
     
    /**
-    * Converts a timestamp delta to a readable duration
+    * Converts a UNIX timestamp delta (in seconds) to a readable duration.
     * 
     * @param timestamp UNIX Timestamp delta to convert
     * @return String with the parsed duration

@@ -116,8 +116,8 @@ public class MoneyUser {
     * @return Time in seconds to wait
     */ 
     public long getTimeToWait(String identifier) {
-        long timestamp = config.getConfig().getLong("prizes." + identifier, 0);
-        long timedelay = MoneySigns.plugin.getConfig().getLong("timeouts." + identifier, 259200) * 1000;
+        long timestamp = config.getConfig().getLong("prizes." + identifier, 0) / 1000;
+        long timedelay = MoneySigns.plugin.getConfig().getLong("timeouts." + identifier, 259200);
         
         long now = new java.util.Date().getTime() / 1000;
         
