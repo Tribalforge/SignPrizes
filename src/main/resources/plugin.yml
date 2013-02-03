@@ -1,0 +1,4 @@
+name: MoneySigns
+main: uk.co.drnaylor.moneysigns.MoneySigns
+version: maven-version-number
+depends: [Vault]
