@@ -88,9 +88,14 @@ public class MoneyUser {
             return true;
         }
         
-        if (getTimeToWait(identifier) == 0) {
-            return true;
-        } else {
+        try {
+            if (getTimeToWait(identifier) == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        catch (IdentifierException e) {
             return false;
         }
     }   
@@ -101,9 +106,14 @@ public class MoneyUser {
     * @param identifier Identifier to check
     * @return Time in seconds to wait
     */ 
-    public long getTimeToWait(String identifier) {
+    public long getTimeToWait(String identifier) throws IdentifierException {
+        if (!MoneySigns.plugin.checkIdentifier(identifier)) {
+            throw new IdentifierException(identifier);
+        }
+        
         long timestamp = config.getConfig().getLong("prizes." + identifier, 0) / 1000;
-        long timedelay = MoneySigns.plugin.getConfig().getLong("timeouts." + identifier, 259200);
+        long timedelay = MoneySigns.plugin.getIdentifier(identifier);
+       
         
         long now = new java.util.Date().getTime() / 1000;
         

@@ -94,9 +94,18 @@ public class MoneySigns extends JavaPlugin
     * @return true if it exists
     */
     public boolean checkIdentifier(String id) {
-        return (this.getConfig().isSet("timeout." + id));
+        return (this.getConfig().isSet("timeouts." + id));
     }
     
+   /**
+    * Gets an identifier's timeout
+    * 
+    * @param id Identifier
+    * @returns Timeout in seconds
+    */ 
+    public long getIdentifier(String id) {
+        return getConfig().getLong("timeouts." + id);
+    } 
     
    /**
     * Sets an identifier with a timeout
@@ -105,7 +114,7 @@ public class MoneySigns extends JavaPlugin
     * @param timeout Timeout in seconds
     */ 
     public void setIdentifier(String id, long timeout) {
-        getConfig().set("timeout." + id, timeout);
+        getConfig().set("timeouts." + id, timeout);
         saveConfig();
     }
     
@@ -115,7 +124,7 @@ public class MoneySigns extends JavaPlugin
     * @param id Identifier
     */ 
     public void removeIdentifier(String id) {
-        getConfig().set("timeout." + id, null);
+        getConfig().set("timeouts." + id, null);
         saveConfig();
     }
 }

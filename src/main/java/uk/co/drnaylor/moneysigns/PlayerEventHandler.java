@@ -86,8 +86,14 @@ public class PlayerEventHandler implements Listener {
                         }
                     } 
                     else {
-                        long ttl = mu.getTimeToWait(identifier);
-                        event.getPlayer().sendMessage(ChatColor.RED + "You must wait for " + Util.toDuration(ttl) + " before you may use that sign again.");
+                        try {
+                            long ttl = mu.getTimeToWait(identifier);
+                            event.getPlayer().sendMessage(ChatColor.RED + "You must wait for " + Util.toDuration(ttl) + " before you may use that sign again.");
+                        }
+                        catch (IdentifierException e) {
+                            e.printStackTrace();
+                            event.getPlayer().sendMessage(ChatColor.RED + "An error occured - maybe the sign is malformed?");
+                        }
                     }
                 }
             }
