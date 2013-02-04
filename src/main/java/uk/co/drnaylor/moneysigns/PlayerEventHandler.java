@@ -22,6 +22,7 @@
 package uk.co.drnaylor.moneysigns;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -57,13 +58,15 @@ public class PlayerEventHandler implements Listener {
     public void OnPlayerInteract(PlayerInteractEvent event) {
         
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (event.getClickedBlock() instanceof Sign) {
-                Sign sign = (Sign)event.getClickedBlock();
+            if (event.getClickedBlock().getType() == Material.SIGN_POST || event.getClickedBlock().getType() == Material.WALL_SIGN) {
+                
+                Sign sign = (Sign)event.getClickedBlock().getState();
                 if (sign.getLine(0).equalsIgnoreCase(ChatColor.GREEN + "[MoneyPrize]")) {
                     MoneyUser mu = MoneySigns.users.get(event.getPlayer());
-                    if (!event.getPlayer().hasPermission("moneysigns.signs.use") || mu.canGetPrizes()) {
+                    if (!mu.canGetPrizes()) {
                         event.setCancelled(true);
                         event.getPlayer().sendMessage(ChatColor.RED + "You cannot use this sign!");
+                        return;
                     }
                     
                     String identifier = sign.getLine(2);
@@ -93,12 +96,15 @@ public class PlayerEventHandler implements Listener {
     
     @EventHandler(priority = EventPriority.HIGHEST)
     public void OnBlockBreak(BlockBreakEvent event) {
-            if (event.getBlock() instanceof Sign) {
-                Sign sign = (Sign)event.getBlock();
+            if (event.getBlock().getType() == Material.SIGN_POST || event.getBlock().getType() == Material.WALL_SIGN) {
+                Sign sign = (Sign)event.getBlock().getState();
                 if (sign.getLine(0).equalsIgnoreCase(ChatColor.GREEN + "[MoneyPrize]")) {
-                    if (!event.getPlayer().hasPermission("moneysigns.signs.remove")) {
+                    if (!event.getPlayer().hasPermission("moneysigns.signs.remove") && !event.getPlayer().isOp()) {
                         event.setCancelled(true);
                         event.getPlayer().sendMessage(ChatColor.RED + "You cannot remove this sign!");
+                    }
+                    else {
+                        event.getPlayer().sendMessage(ChatColor.GREEN + "You removed a MoneyPrize sign!");
                     }
                 }
             }
@@ -107,7 +113,7 @@ public class PlayerEventHandler implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onSignChange(SignChangeEvent event){
         if (event.getLine(0).toLowerCase().contains("[moneyprize]")) {
-               if (!event.getPlayer().hasPermission("moneysigns.signs.create")) {
+               if (!event.getPlayer().hasPermission("moneysigns.signs.create") && !event.getPlayer().isOp()) {
                     event.setCancelled(true);
                     event.getBlock().breakNaturally();
                     event.getPlayer().sendMessage(ChatColor.RED + "You do not have permission to create this sign!");
@@ -134,7 +140,7 @@ public class PlayerEventHandler implements Listener {
                 }
                 
                 String identifier = event.getLine(2);
-                if (!MoneySigns.plugin.checkIdentifier(identifier)) {
+                if (!MoneySigns.plugin.checkIdentifier(identifier.toLowerCase())) {
                     event.setCancelled(true);
                     event.getBlock().breakNaturally();
                     event.getPlayer().sendMessage(ChatColor.RED + "The third line must be a identifier! (add it with /msid set <id> <timeout>)");                    
@@ -142,6 +148,7 @@ public class PlayerEventHandler implements Listener {
                 }
 
                 event.setLine(0, ChatColor.GREEN + "[MoneyPrize]");
+                event.setLine(2, identifier.toLowerCase());
                 event.getPlayer().sendMessage(ChatColor.RED + "Sign created succesfully!");                    
             }
     }

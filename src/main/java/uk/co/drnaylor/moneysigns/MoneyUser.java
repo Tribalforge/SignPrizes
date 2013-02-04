@@ -31,8 +31,7 @@ public class MoneyUser {
     
     final Player player;
     final ConfigAccessor config;
-    
-    private boolean enabled = true;
+
     
     
     public MoneyUser(Player a)
@@ -42,11 +41,7 @@ public class MoneyUser {
         config = new ConfigAccessor(MoneySigns.plugin, "userdata/" + a.getName() + ".yml");
 
         if (new File(MoneySigns.plugin.getDataFolder().toString() + "/userdata/" + a.getName() + ".yml").exists()) {
-            config.getConfig().set("prizes-enabled", false);
             config.saveConfig();
-        }
-        else {
-            enabled = config.getConfig().getBoolean("prizes-enabled", true);
         }
         
     }
@@ -57,7 +52,10 @@ public class MoneyUser {
     * @return true if the player is unable to use prize signs.
     */
     public boolean canGetPrizes() {
-        return enabled;
+        if (player.isOp()) {
+            return true;
+        }
+        return player.hasPermission("moneysigns.signs.use");
     }
     
    /**
@@ -71,20 +69,8 @@ public class MoneyUser {
     * Saves the config file to disk.
     */
     public void saveConfig() {
-        config.getConfig().set("prizes-enabled", enabled);
         config.saveConfig();
-    }
-    
-   /**
-    * Sets whether the player can use prize signs.
-    * 
-    * @param en true if the player can use
-    */ 
-    public void setGetPrizes(boolean en) {
-        enabled = en;
-        saveConfig();
-    }
-    
+    }    
     
    /**
     * Checks whether the player can get a prize.
@@ -124,7 +110,7 @@ public class MoneyUser {
         if (timestamp + timedelay < now) {
             return 0;
         } else {
-            return now - (timestamp + timedelay);
+            return (timestamp + timedelay) - now;
         }
     }
     

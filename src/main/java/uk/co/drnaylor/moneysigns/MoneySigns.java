@@ -97,4 +97,25 @@ public class MoneySigns extends JavaPlugin
         return (this.getConfig().isSet("timeout." + id));
     }
     
+    
+   /**
+    * Sets an identifier with a timeout
+    * 
+    * @param id Identifier
+    * @param timeout Timeout in seconds
+    */ 
+    public void setIdentifier(String id, long timeout) {
+        getConfig().set("timeout." + id, timeout);
+        saveConfig();
+    }
+    
+   /**
+    * Removes an identifier.
+    * 
+    * @param id Identifier
+    */ 
+    public void removeIdentifier(String id) {
+        getConfig().set("timeout." + id, null);
+        saveConfig();
+    }
 }

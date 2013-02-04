@@ -44,7 +44,7 @@ public class Commandmsid implements CommandExecutor {
             }
             else if (args[0].equalsIgnoreCase("remove")) {
                 if (MoneySigns.plugin.getConfig().isSet("timeouts." + args[1].toLowerCase())) {
-                    MoneySigns.plugin.getConfig().set("timeouts." + args[1].toLowerCase(), null);
+                    MoneySigns.plugin.removeIdentifier(args[1].toLowerCase());  
                     sender.sendMessage(ChatColor.GREEN + "Identifier " + args[1].toLowerCase() + " removed");
                 }
                 else {
@@ -65,7 +65,7 @@ public class Commandmsid implements CommandExecutor {
                 sender.sendMessage(ChatColor.RED + "The timeout must be a number (in seconds)");
                 return true;
             }
-            MoneySigns.plugin.getConfig().set("timeouts." + args[1].toLowerCase(), timeout);  
+            MoneySigns.plugin.setIdentifier(args[1].toLowerCase(), timeout);  
             sender.sendMessage(ChatColor.GREEN + "Identifier " + args[1].toLowerCase() + " has been created with a timeout of " + Util.toDuration(timeout));
             MoneySigns.plugin.saveConfig();
             return true;
