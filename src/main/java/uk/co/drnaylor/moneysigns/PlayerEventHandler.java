@@ -107,7 +107,7 @@ public class PlayerEventHandler implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onSignChange(SignChangeEvent event){
         if (event.getLine(0).toLowerCase().contains("[moneyprize]")) {
-                if (!event.getPlayer().hasPermission("moneysigns.signs.create")) {
+               if (!event.getPlayer().hasPermission("moneysigns.signs.create")) {
                     event.setCancelled(true);
                     event.getBlock().breakNaturally();
                     event.getPlayer().sendMessage(ChatColor.RED + "You do not have permission to create this sign!");

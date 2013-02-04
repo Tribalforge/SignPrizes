@@ -55,6 +55,7 @@ public class MoneySigns extends JavaPlugin
         }
 
         eventHandler = new PlayerEventHandler();
+        mainCE = new Commandmsid();
         
         getCommand("msid").setExecutor(mainCE);
         getServer().getPluginManager().registerEvents(eventHandler, this);
