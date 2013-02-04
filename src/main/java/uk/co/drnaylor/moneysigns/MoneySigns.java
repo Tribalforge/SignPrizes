@@ -28,11 +28,13 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import uk.co.drnaylor.moneysigns.commands.Commandmsclear;
 import uk.co.drnaylor.moneysigns.commands.Commandmsid;
 
 public class MoneySigns extends JavaPlugin
 {
-    public static Map<Player, MoneyUser> users;
+    private static Map<Player, MoneyUser> users;
+    
     public static MoneySigns plugin;
     public static Permission permission = null;
     public static Economy economy = null;
@@ -40,7 +42,8 @@ public class MoneySigns extends JavaPlugin
             
     PlayerEventHandler eventHandler;
     Commandmsid mainCE;
-
+    Commandmsclear clearCE;
+    
     @Override
     public void onEnable() {
         MoneySigns.plugin = this;
@@ -56,8 +59,10 @@ public class MoneySigns extends JavaPlugin
 
         eventHandler = new PlayerEventHandler();
         mainCE = new Commandmsid();
+        clearCE = new Commandmsclear();
         
         getCommand("msid").setExecutor(mainCE);
+        getCommand("msclear").setExecutor(clearCE);
         getServer().getPluginManager().registerEvents(eventHandler, this);
         saveDefaultConfig();
         for (Player p : this.getServer().getOnlinePlayers()) {
@@ -66,6 +71,40 @@ public class MoneySigns extends JavaPlugin
                 users.put(p, mu);
             }
         }
+    }
+    
+    @Override
+    public void onDisable() {
+        for (MoneyUser u : users.values()) {
+            u.saveConfig();
+        }
+        users.clear();
+        saveConfig();
+    }
+    
+   /**
+    * Get the MoneyUser associated with the player.
+    * @param player Player to get the MoneyUser object for.
+    * @return MoneyUser object for the player
+    */
+    public static MoneyUser getMoneyUser(Player player) {
+        return users.get(player);
+    }
+    
+   /**
+    * Add player to MoneyUsers
+    * @param player Player to add
+    */ 
+    static void addMoneyUser(Player player) {
+        users.put(player, new MoneyUser(player));
+    }
+    
+   /**
+    * Remove player from MoneyUsers
+    * @param player Player to remove
+    */ 
+    static void removeMoneyUser(Player player) {
+        users.remove(player);
     }
     
     private boolean setupPermissions()

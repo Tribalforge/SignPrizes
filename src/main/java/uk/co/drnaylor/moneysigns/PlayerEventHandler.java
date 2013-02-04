@@ -39,16 +39,15 @@ public class PlayerEventHandler implements Listener {
     // Player Join - open MoneyUser class for him/her
     @EventHandler
     public void OnPlayerJoin(PlayerJoinEvent event) {
-        MoneyUser a = new MoneyUser(event.getPlayer());
-        MoneySigns.users.put(event.getPlayer(), a);
+        MoneySigns.addMoneyUser(event.getPlayer());
     }
     
     // Player Quit - close MoneyUser class and save file
     @EventHandler
     public void OnPlayerQuit(PlayerQuitEvent event) {
-        MoneyUser a = MoneySigns.users.get(event.getPlayer());
+        MoneyUser a = MoneySigns.getMoneyUser(event.getPlayer());
         a.saveConfig();
-        MoneySigns.users.remove(event.getPlayer());
+        MoneySigns.removeMoneyUser(event.getPlayer());
     }
     
     // PlayerInteractEvent - signs!
@@ -60,7 +59,7 @@ public class PlayerEventHandler implements Listener {
                 
                 Sign sign = (Sign)event.getClickedBlock().getState();
                 if (sign.getLine(0).equalsIgnoreCase(ChatColor.GREEN + "[MoneyPrize]")) {
-                    MoneyUser mu = MoneySigns.users.get(event.getPlayer());
+                    MoneyUser mu = MoneySigns.getMoneyUser(event.getPlayer());
                     if (!mu.canGetPrizes()) {
                         event.setCancelled(true);
                         event.getPlayer().sendMessage(ChatColor.RED + "You cannot use this sign!");
@@ -101,7 +100,7 @@ public class PlayerEventHandler implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void OnBlockBreak(BlockBreakEvent event) {
             if (event.getBlock().getType() == Material.SIGN_POST || event.getBlock().getType() == Material.WALL_SIGN) {
-                MoneyUser mu = MoneySigns.users.get(event.getPlayer());
+                MoneyUser mu = MoneySigns.getMoneyUser(event.getPlayer());
                 Sign sign = (Sign)event.getBlock().getState();
                 if (sign.getLine(0).equalsIgnoreCase(ChatColor.GREEN + "[MoneyPrize]")) {
                     if (!mu.canRemoveSign()) {
@@ -118,7 +117,7 @@ public class PlayerEventHandler implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onSignChange(SignChangeEvent event){
         if (event.getLine(0).toLowerCase().contains("[moneyprize]")) {
-               MoneyUser mu = MoneySigns.users.get(event.getPlayer());
+               MoneyUser mu = MoneySigns.getMoneyUser(event.getPlayer());
                if (!mu.canCreateSign()) {
                     event.setCancelled(true);
                     event.getBlock().breakNaturally();

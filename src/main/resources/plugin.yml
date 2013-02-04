@@ -8,3 +8,8 @@ commands:
     usage: /msid <get|set|remove> [identifier] [timeout]
     permission: moneysigns.command.msid
     permission-message: You don't have permission to perform that command!
+  msclear:
+    description: Clears a players' cooldown
+    usage: /msclear [player] [id]
+    permission: moneysigns.command.msclear
+    permission-message: You don't have permission to perform that command!

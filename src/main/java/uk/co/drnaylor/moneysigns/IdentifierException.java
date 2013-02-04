@@ -1,6 +1,4 @@
 /*
- * The MIT License
- *
  * Copyright 2013 Dr Daniel R Naylor.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy

@@ -76,7 +76,8 @@ public class ConfigAccessor {
     }
 
     public void saveConfig() {
-        if (!(fileConfiguration == null) && !(configFile == null)) {
+        if (fileConfiguration == null || configFile == null) {
+            return;
         } else {
             try {
                 getConfig().save(configFile);

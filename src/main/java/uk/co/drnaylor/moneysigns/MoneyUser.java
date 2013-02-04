@@ -40,9 +40,11 @@ public class MoneyUser {
        
         config = new ConfigAccessor(MoneySigns.plugin, "userdata/" + a.getName() + ".yml");
 
-        if (new File(MoneySigns.plugin.getDataFolder().toString() + "/userdata/" + a.getName() + ".yml").exists()) {
+        if (!(new File(MoneySigns.plugin.getDataFolder().toString() + "/userdata/" + a.getName() + ".yml").exists())) {
             config.saveConfig();
         }
+        
+        reloadConfig();
         
     }
 
@@ -172,4 +174,16 @@ public class MoneyUser {
         return player.hasPermission("moneysigns.signs.remove");
     }
     
+   /**
+    * Removes the player's cooldown for the selected identifier, allowing them
+    * to get the prize immediately. This is a one time action, and the timeout
+    * will kick in again next time the player claims a prize with this 
+    * identifier.
+    * 
+    * @param identifier Identifier to clear the cooldown.
+    */
+    public void clearTimeout(String identifier) {
+            config.getConfig().set("prizes." + identifier, null);
+            config.saveConfig();
+    }
 }
