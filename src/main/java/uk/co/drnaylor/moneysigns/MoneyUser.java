@@ -148,4 +148,28 @@ public class MoneyUser {
         return resp.transactionSuccess();
     }
     
+   /**
+    * Checks to see if the player can create MoneyPrize signs.
+    * 
+    * @returns Whether the player can create MoneyPrize signs
+    */ 
+    public boolean canCreateSign() {
+        if (player.isOp()) {
+            return true;
+        }
+        return player.hasPermission("moneysigns.signs.create");
+    }
+    
+   /**
+    * Checks to see if the player can remove MoneyPrize signs.
+    * 
+    * @returns Whether the player can remove MoneyPrize signs
+    */  
+    public boolean canRemoveSign() {
+        if (player.isOp()) {
+            return true;
+        }
+        return player.hasPermission("moneysigns.signs.remove");
+    }
+    
 }

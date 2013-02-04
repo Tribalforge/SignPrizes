@@ -40,14 +40,49 @@ public abstract class Util {
         
         StringBuilder s = new StringBuilder();
         
-        s.append(days);
-        s.append(" days, ");
-        s.append(hours);
-        s.append(" hours, ");
-        s.append(minutes);
-        s.append(" minutes, ");
-        s.append(seconds);
-        s.append(" seconds");
+        if (days != 0) {
+            s.append(days);
+            s.append(" day");
+            if (days > 1) {
+                s.append("s");
+            }
+        }
+        if (hours != 0) {
+            if (s.length() != 0) {
+                s.append(", ");
+            }
+            s.append(hours);
+            s.append(" hour");
+            if (hours > 1) {
+                s.append("s");
+            }
+        }
+        if (minutes != 0) {
+             if (s.length() != 0) {
+                s.append(", ");
+            }
+            s.append(minutes);
+            s.append(" minute");
+            if (minutes > 1) {
+                s.append("s");
+            }
+        }
+        if (seconds != 0) {
+             if (s.length() != 0) {
+                s.append(", ");
+            }
+            s.append(seconds);
+            s.append(" second");
+            if (seconds > 1) {
+                s.append("s");
+            }
+        }
+        
+        int index = s.lastIndexOf(",");
+        
+        if (index > -1) {
+            s.replace(index, index+1, " and");
+        }
         
         return s.toString();
     }

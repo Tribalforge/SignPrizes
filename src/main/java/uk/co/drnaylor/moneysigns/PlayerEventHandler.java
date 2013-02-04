@@ -24,13 +24,11 @@ package uk.co.drnaylor.moneysigns;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -103,9 +101,10 @@ public class PlayerEventHandler implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void OnBlockBreak(BlockBreakEvent event) {
             if (event.getBlock().getType() == Material.SIGN_POST || event.getBlock().getType() == Material.WALL_SIGN) {
+                MoneyUser mu = MoneySigns.users.get(event.getPlayer());
                 Sign sign = (Sign)event.getBlock().getState();
                 if (sign.getLine(0).equalsIgnoreCase(ChatColor.GREEN + "[MoneyPrize]")) {
-                    if (!event.getPlayer().hasPermission("moneysigns.signs.remove") && !event.getPlayer().isOp()) {
+                    if (!mu.canRemoveSign()) {
                         event.setCancelled(true);
                         event.getPlayer().sendMessage(ChatColor.RED + "You cannot remove this sign!");
                     }
@@ -119,7 +118,8 @@ public class PlayerEventHandler implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onSignChange(SignChangeEvent event){
         if (event.getLine(0).toLowerCase().contains("[moneyprize]")) {
-               if (!event.getPlayer().hasPermission("moneysigns.signs.create") && !event.getPlayer().isOp()) {
+               MoneyUser mu = MoneySigns.users.get(event.getPlayer());
+               if (!mu.canCreateSign()) {
                     event.setCancelled(true);
                     event.getBlock().breakNaturally();
                     event.getPlayer().sendMessage(ChatColor.RED + "You do not have permission to create this sign!");
