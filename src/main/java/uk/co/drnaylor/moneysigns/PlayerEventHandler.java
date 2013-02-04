@@ -23,12 +23,14 @@ package uk.co.drnaylor.moneysigns;
 
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -90,7 +92,7 @@ public class PlayerEventHandler implements Listener {
     }
     
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void OnBlockPlace(BlockBreakEvent event) {
+    public void OnBlockBreak(BlockBreakEvent event) {
             if (event.getBlock() instanceof Sign) {
                 Sign sign = (Sign)event.getBlock();
                 if (sign.getLine(0).equalsIgnoreCase(ChatColor.GREEN + "[MoneyPrize]")) {
@@ -102,44 +104,45 @@ public class PlayerEventHandler implements Listener {
             }
     }
     
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void OnBlockPlace(BlockPlaceEvent event) {
-        if (event.getBlockPlaced() instanceof Sign) {
-            Sign sign = (Sign)event.getBlockPlaced();
-            if (sign.getLine(0).toLowerCase().contains("[moneyprize]")) {
+    @EventHandler(priority = EventPriority.LOW)
+    public void onSignChange(SignChangeEvent event){
+        if (event.getLine(0).toLowerCase().contains("[moneyprize]")) {
                 if (!event.getPlayer().hasPermission("moneysigns.signs.create")) {
                     event.setCancelled(true);
+                    event.getBlock().breakNaturally();
                     event.getPlayer().sendMessage(ChatColor.RED + "You do not have permission to create this sign!");
                     return;
                 }
                 
-                String line1 = sign.getLine(1);
+                String line1 = event.getLine(1);
                 int amount;
                 try {
                     amount = Integer.valueOf(line1);
                 }
                 catch (NumberFormatException e) {
                     event.setCancelled(true);
+                    event.getBlock().breakNaturally();
                     event.getPlayer().sendMessage(ChatColor.RED + "The second line must be a positive integer!");
                     return;
                 }
                 
                 if (amount <= 0) {
                     event.setCancelled(true);
+                    event.getBlock().breakNaturally();
                     event.getPlayer().sendMessage(ChatColor.RED + "The second line must be a positive integer!");
                     return;
                 }
                 
-                String identifier = sign.getLine(2);
+                String identifier = event.getLine(2);
                 if (!MoneySigns.plugin.checkIdentifier(identifier)) {
                     event.setCancelled(true);
+                    event.getBlock().breakNaturally();
                     event.getPlayer().sendMessage(ChatColor.RED + "The third line must be a identifier! (add it with /msid set <id> <timeout>)");                    
                     return;
                 }
 
-                sign.setLine(0, ChatColor.GREEN + "[MoneyPrize]");
+                event.setLine(0, ChatColor.GREEN + "[MoneyPrize]");
                 event.getPlayer().sendMessage(ChatColor.RED + "Sign created succesfully!");                    
             }
-        }
     }
 }

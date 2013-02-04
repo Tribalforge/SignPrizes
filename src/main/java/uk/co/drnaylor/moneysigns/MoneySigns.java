@@ -58,7 +58,7 @@ public class MoneySigns extends JavaPlugin
         
         getCommand("msid").setExecutor(mainCE);
         getServer().getPluginManager().registerEvents(eventHandler, this);
-        
+        saveDefaultConfig();
         for (Player p : this.getServer().getOnlinePlayers()) {
             if (!users.containsKey(p)) {
                 MoneyUser mu = new MoneyUser(p);
