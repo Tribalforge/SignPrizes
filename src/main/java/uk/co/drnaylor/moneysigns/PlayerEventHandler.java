@@ -59,16 +59,15 @@ public class PlayerEventHandler implements Listener {
                 
                 Sign sign = (Sign)event.getClickedBlock().getState();
                 if (sign.getLine(0).equalsIgnoreCase(ChatColor.GREEN + "[MoneyPrize]")) {
+                    event.setCancelled(true); // Cancel block place (hopefully!)
                     MoneyUser mu = MoneySigns.getMoneyUser(event.getPlayer());
                     if (!mu.canGetPrizes()) {
-                        event.setCancelled(true);
                         event.getPlayer().sendMessage(ChatColor.RED + "You cannot use this sign!");
                         return;
                     }
                     
                     String identifier = sign.getLine(2);
                     if (!MoneySigns.plugin.checkIdentifier(identifier)) {
-                        event.setCancelled(true);
                         event.getPlayer().sendMessage(ChatColor.RED + "Identifier not found!");
                         return;
                     }
