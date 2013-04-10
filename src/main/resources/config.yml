@@ -1,1 +1,36 @@
-timeouts:
+prizes:
+    tools:
+        timeout: 3600
+        sets:
+            stone:
+                items:
+                  - 272 1
+                  - 273 1
+                  - 274 1
+                  - 275 1
+                money: 50
+            iron:
+                items:
+                  - 256 1
+                  - 257 1
+                  - 258 1
+                  - 267 1
+                money: 250
+            diamond:
+                items:
+                  - 276 1
+                  - 277 1
+                  - 278 1
+                  - 279 1
+                money: 500
+    stone:
+        timeout: 3600
+        sets:
+            cobble:
+                items:
+                  - 4 64
+                money: 0
+            smooth:
+                items:
+                  - 1 64
+                money: 0
