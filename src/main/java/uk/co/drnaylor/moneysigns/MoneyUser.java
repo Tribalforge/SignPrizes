@@ -49,9 +49,9 @@ public class MoneyUser {
     }
 
    /**
-    * Gets whether the player is unable to claim prizes.
+    * Gets whether the player is able to claim prizes.
     * 
-    * @return true if the player is unable to use prize signs.
+    * @return true if the player is able to use prize signs.
     */
     public boolean canGetPrizes() {
         if (player.isOp()) {
