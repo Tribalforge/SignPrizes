@@ -54,6 +54,12 @@ public class PlayerEventHandler implements Listener {
     @EventHandler
     public void OnPlayerInteract(PlayerInteractEvent event) {
         
+        // New sign layout:
+        //
+        // &a[SignPrize]
+        // Identifier
+        //    Set
+        
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (event.getClickedBlock().getType() == Material.SIGN_POST || event.getClickedBlock().getType() == Material.WALL_SIGN) {
                 
