@@ -52,9 +52,9 @@ public class MoneySigns extends JavaPlugin
         }
         setupPermissions();
         if (!setupEconomy()) {
-            this.getLogger().severe("[MoneySigns] No economy plugin has been found. Disabling.");
-            this.getPluginLoader().disablePlugin(this);
-            return;
+			this.getLogger().info("[SignPrizes] No economy plugin has been found!");
+			this.getLogger().info("[SignPrizes] Any money in a prize set will not be awarded.");
+			this.getLogger().info("[SignPrizes] Item awards in a prize set are still functional.");
         }
 
         eventHandler = new PlayerEventHandler();
