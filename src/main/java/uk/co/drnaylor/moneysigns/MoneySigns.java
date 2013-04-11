@@ -129,19 +129,21 @@ public class MoneySigns extends JavaPlugin
    /**
     * Checks to see if an identifier exists.
     * 
-    * @param id Identifier and set to check, separated by a colon
+    * @param id Identifier to check
     * @return true if it exists
     */
     public boolean checkIdentifier(String id) {
-        String[] args = id.split(":");
-        if (args.length >= 2) { 
-        	// We need the prize identifier and the set name.
-        	// If we don't have those arguments, we can say the prize doesn't exist.
-        	// Any more arguments can be ignored.
-			return (this.getConfig().isSet("prizes." + args[0] + ".sets." + args[1]));
-        } else {
-        	return false; // Not enough arguments.
-        }
+	return (this.getConfig().isSet("prizes." + id));
+    }
+    
+   /**
+    * Checks to see if an identifier and set exist.
+    * 
+    * @param id Identifier to check
+    * @param set The set name to check
+    */
+    public boolean checkIdentifier(String id, String set) {
+	return (this.getConfig().isSet("prizes." + id + ".sets." + set));
     }
     
    /**
@@ -151,8 +153,7 @@ public class MoneySigns extends JavaPlugin
     * @returns Timeout in seconds
     */ 
     public long getIdentifier(String id) {
-        String[] args = id.split(":"); // In case the calling method left the set name on
-        return getConfig().getLong("prizes." + args[0]);
+        return getConfig().getLong("prizes." + id);
     } 
     
    /**
@@ -162,8 +163,7 @@ public class MoneySigns extends JavaPlugin
     * @param timeout Timeout in seconds
     */ 
     public void setIdentifier(String id, long timeout) {
-        String[] args = id.split(":"); // In case the calling method left the set name on
-        getConfig().set("prizes." + args[0] + ".timeout", timeout);
+        getConfig().set("prizes." + id + ".timeout", timeout);
         saveConfig();
     }
     
@@ -181,8 +181,7 @@ public class MoneySigns extends JavaPlugin
      * @param id Identifier
      */ 
      public void removeIdentifier(String id) {
-         String[] args = id.split(":"); // In case the calling method left the set name on
-         getConfig().set("prizes." + args[0], null);
+         getConfig().set("prizes." + id, null);
          saveConfig();
      }
     
