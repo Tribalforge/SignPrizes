@@ -129,11 +129,19 @@ public class MoneySigns extends JavaPlugin
    /**
     * Checks to see if an identifier exists.
     * 
-    * @param id Identifier to check
+    * @param id Identifier and set to check, separated by a colon
     * @return true if it exists
     */
     public boolean checkIdentifier(String id) {
-        return (this.getConfig().isSet("timeouts." + id));
+        String[] args = id.split(":");
+        if (args.length >= 2) { 
+        	// We need the prize identifier and the set name.
+        	// If we don't have those arguments, we can say the prize doesn't exist.
+        	// Any more arguments can be ignored.
+			return (this.getConfig().isSet("prizes." + args[0] + ".sets." + args[1]));
+        } else {
+        	return false; // Not enough arguments.
+        }
     }
     
    /**
@@ -143,7 +151,8 @@ public class MoneySigns extends JavaPlugin
     * @returns Timeout in seconds
     */ 
     public long getIdentifier(String id) {
-        return getConfig().getLong("timeouts." + id);
+        String[] args = id.split(":"); // In case the calling method left the set name on
+        return getConfig().getLong("prizes." + args[0]);
     } 
     
    /**
@@ -153,17 +162,38 @@ public class MoneySigns extends JavaPlugin
     * @param timeout Timeout in seconds
     */ 
     public void setIdentifier(String id, long timeout) {
-        getConfig().set("timeouts." + id, timeout);
+        String[] args = id.split(":"); // In case the calling method left the set name on
+        getConfig().set("prizes." + args[0] + ".timeout", timeout);
         saveConfig();
     }
     
-   /**
-    * Removes an identifier.
-    * 
-    * @param id Identifier
-    */ 
-    public void removeIdentifier(String id) {
-        getConfig().set("timeouts." + id, null);
-        saveConfig();
-    }
+    /**
+     * Adds or modifies a set for a prize identifier.
+     * Still under development.
+     */
+	public void setPrizeSet(String id, String set/*, parameter about item and money information*/) {
+		
+	}
+    
+    /**
+     * Removes an identifier.
+     * 
+     * @param id Identifier
+     */ 
+     public void removeIdentifier(String id) {
+         String[] args = id.split(":"); // In case the calling method left the set name on
+         getConfig().set("prizes." + args[0], null);
+         saveConfig();
+     }
+    
+    /**
+     * Removes a specific set from a prize.
+     * 
+     * @param id The prize name
+     * @param set The set name
+     */
+     public void removeSet(String id, String set) {
+     	getConfig().set("prizes." + id + ".sets." + set, null);
+     	saveConfig();
+     }
 }
