@@ -130,7 +130,10 @@ public class PlayerEventHandler implements Listener {
                     return;
                 }
                 
-                String line1 = event.getLine(1);
+                String identifier = event.getLine(1); // This is now the identifier name.
+                String set = event.getLine(2); // This is the set name.
+                
+                /*
                 int amount;
                 try {
                     amount = Integer.valueOf(line1);
@@ -148,12 +151,19 @@ public class PlayerEventHandler implements Listener {
                     event.getPlayer().sendMessage(ChatColor.RED + "The second line must be a positive integer!");
                     return;
                 }
+                */
                 
-                String identifier = event.getLine(2);
+                //String identifier = event.getLine(2);
                 if (!MoneySigns.plugin.checkIdentifier(identifier.toLowerCase())) {
                     event.setCancelled(true);
                     event.getBlock().breakNaturally();
-                    event.getPlayer().sendMessage(ChatColor.RED + "The third line must be a identifier! (add it with /msid set <id> <timeout>)");                    
+                    event.getPlayer().sendMessage(ChatColor.RED + "The second line must be an identifier! (add it with /msid set <id> <timeout>)");                    
+                    return;
+                }
+                if (!MoneySigns.plugin.checkIdentifier(identifier.toLowerCase(), set.toLowerCase())) {
+                    event.setCancelled(true);
+                    event.getBlock().breakNaturally();
+                    event.getPlayer().sendMessage(ChatColor.RED + "The set \"" + set.toLowerCase() + "\" doesn't exist for \"" + identifier.toLowerCase() + "\"! (add it with /msid set <id> <timeout>)");                    
                     return;
                 }
 
