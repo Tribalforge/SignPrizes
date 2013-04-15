@@ -64,9 +64,10 @@ public class PlayerEventHandler implements Listener {
             if (event.getClickedBlock().getType() == Material.SIGN_POST || event.getClickedBlock().getType() == Material.WALL_SIGN) {
                 
                 Sign sign = (Sign)event.getClickedBlock().getState();
-                if ((sign.getLine(0).equalsIgnoreCase(ChatColor.GREEN + "[MoneyPrize]")) || (sign.getLine(0).equalsIgnoreCase(ChatColor.GREEN + "[SignPrize]"))) {
-                    // To keep compatibility with previous signs
+                if (sign.getLine(0).equalsIgnoreCase(ChatColor.GREEN + "[SignPrize]")) {
+                	
                     event.setCancelled(true); // Cancel block place (hopefully!)
+                    
                     MoneyUser mu = MoneySigns.getMoneyUser(event.getPlayer());
                     if (!mu.canGetPrizes()) {
                         event.getPlayer().sendMessage(ChatColor.RED + "You cannot use this sign!");
@@ -107,7 +108,7 @@ public class PlayerEventHandler implements Listener {
             if (event.getBlock().getType() == Material.SIGN_POST || event.getBlock().getType() == Material.WALL_SIGN) {
                 MoneyUser mu = MoneySigns.getMoneyUser(event.getPlayer());
                 Sign sign = (Sign)event.getBlock().getState();
-                if (sign.getLine(0).equalsIgnoreCase(ChatColor.GREEN + "[MoneyPrize]") || sign.getLine(0).equalsIgnoreCase(ChatColor.GREEN + "[SignPrize]")) {
+                if (sign.getLine(0).equalsIgnoreCase(ChatColor.GREEN + "[SignPrize]")) {
                     if (!mu.canRemoveSign()) {
                         event.setCancelled(true);
                         event.getPlayer().sendMessage(ChatColor.RED + "You cannot remove this sign!");
@@ -122,8 +123,8 @@ public class PlayerEventHandler implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onSignChange(SignChangeEvent event){
         if (event.getLine(0).toLowerCase().contains("[signprize]")) { // Start making SignPrizes instead of MoneyPrizes!
-               MoneyUser mu = MoneySigns.getMoneyUser(event.getPlayer());
-               if (!mu.canCreateSign()) {
+            	MoneyUser mu = MoneySigns.getMoneyUser(event.getPlayer());
+            	if (!mu.canCreateSign()) {
                     event.setCancelled(true);
                     event.getBlock().breakNaturally();
                     event.getPlayer().sendMessage(ChatColor.RED + "You do not have permission to create this sign!");
@@ -167,8 +168,9 @@ public class PlayerEventHandler implements Listener {
                     return;
                 }
 
-                event.setLine(0, ChatColor.GREEN + "[MoneyPrize]");
-                event.setLine(2, identifier.toLowerCase());
+                event.setLine(0, ChatColor.GREEN + "[SignPrize]");
+                event.setLine(1, identifier.toLowerCase());
+                event.setLine(2, set.toLowerCase());
                 event.getPlayer().sendMessage(ChatColor.RED + "Sign created succesfully!");                    
             }
     }
