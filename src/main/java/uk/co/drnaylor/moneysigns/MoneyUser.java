@@ -79,7 +79,7 @@ public class MoneyUser {
     * 
     * @param prize Prize to check for
     * @returns true if the player can get the prize, false otherwise.
-    * 
+    * @deprecated We want to check for the set name as well now.
     */ 
     public boolean canGetPrize(String identifier) {
         if (!canGetPrizes()) {
@@ -100,7 +100,36 @@ public class MoneyUser {
         catch (IdentifierException e) {
             return false;
         }
-    }   
+    }
+    
+    /**
+    * Checks whether the player can get a prize.
+    * 
+    * @param identifier The prize identifier to check for
+    * @param set The set to check for.
+    * @returns true if the player can get the prize, false otherwise.
+    * 
+    */ 
+    public boolean canGetPrize(String identifier, String set) {
+        if (!canGetPrizes()) {
+            return false;
+        }
+        
+        if (!config.getConfig().isSet("prizes." + identifier + ".sets." + set)) {
+            return true;
+        }
+        
+        try {
+            if (getTimeToWait(identifier) == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        catch (IdentifierException e) {
+            return false;
+        }
+    }
     
    /**
     * Gets the time to wait before a prize becomes available again
@@ -132,6 +161,7 @@ public class MoneyUser {
     * @param identifier Identifier of the prize group
     * @param amount Amount to give player
     * @return true if successful
+    * @deprecated We are moving to SignPrizes, not MoneySigns.
     */ 
     public boolean claimPrize(String identifier, int amount) {
         if (!canGetPrize(identifier)) {
@@ -149,6 +179,42 @@ public class MoneyUser {
         }
         return resp.transactionSuccess();
     }
+    
+	/**
+	 * Claim a SignPrizes prize.
+	 * 
+	 * @param id The prize identifier.
+	 * @param set The specific prize set to award.
+	 * @return true if the claim was successful, otherwise false.
+	 */
+	public boolean claimPrize(String id, String set) {
+		if (!canGetPrize(identifier)) {
+			return false; // If they can't actually claim the prize, return false
+		}
+		boolean canClaimItems = false; boolean canClaimMoney = false;
+		
+		//List <String> prizes = MoneySigns.plugin.getConfig().getWhatList("prizes." + id + ".sets." + set + ".items");
+		// If not empty, sort this somehow into the appropriate items
+		
+		/*
+		If the item list is empty, canClaimItems is true. Move on to checking money.
+		Otherwise, check for empty space in the player's inventory for the items they are receiving.
+		If they can receive the items, canClaimItems will be true.
+		
+		Check whether or not an economy plugin is loaded.
+		If one is not loaded, and canClaimItems is true, award the items and return true.
+		Otherwise, if canClaimItems is false, return false.
+		
+		If one is loaded, check if they can receive the money. If they can, canClaimMoney will be true.
+		
+		If both canClaimItems and canClaimMoney are true, give the prizes and return true.
+		Otherwise, return false.
+		*/
+		
+		if (MoneySigns.economy != null) { // If an economy plugin is loaded...
+			
+		}
+	}
     
    /**
     * Checks to see if the player can create MoneyPrize signs.
