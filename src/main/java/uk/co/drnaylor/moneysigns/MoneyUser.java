@@ -79,7 +79,6 @@ public class MoneyUser {
     * 
     * @param prize Prize to check for
     * @returns true if the player can get the prize, false otherwise.
-    * @deprecated We want to check for the set name as well now.
     */ 
     public boolean canGetPrize(String identifier) {
         if (!canGetPrizes()) {
@@ -87,35 +86,6 @@ public class MoneyUser {
         }
         
         if (!config.getConfig().isSet("prizes." + identifier)) {
-            return true;
-        }
-        
-        try {
-            if (getTimeToWait(identifier) == 0) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        catch (IdentifierException e) {
-            return false;
-        }
-    }
-    
-    /**
-    * Checks whether the player can get a prize.
-    * 
-    * @param identifier The prize identifier to check for
-    * @param set The set to check for.
-    * @returns true if the player can get the prize, false otherwise.
-    * 
-    */ 
-    public boolean canGetPrize(String identifier, String set) {
-        if (!canGetPrizes()) {
-            return false;
-        }
-        
-        if (!config.getConfig().isSet("prizes." + identifier + ".sets." + set)) {
             return true;
         }
         
