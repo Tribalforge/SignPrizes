@@ -43,6 +43,7 @@ public class MoneySigns extends JavaPlugin
     PlayerEventHandler eventHandler;
     Commandmsid mainCE;
     Commandmsclear clearCE;
+	CommandSignPrizes spCE;
     
     @Override
     public void onEnable() {
@@ -60,9 +61,12 @@ public class MoneySigns extends JavaPlugin
         eventHandler = new PlayerEventHandler();
         mainCE = new Commandmsid();
         clearCE = new Commandmsclear();
+		// mainCE and clearCE will be replaced by spCE and spclearCE.
+		spCE = new CommandSignPrizes();
         
         getCommand("msid").setExecutor(mainCE);
         getCommand("msclear").setExecutor(clearCE);
+		getCommand("signprizes").setExecutor(spCE);
         getServer().getPluginManager().registerEvents(eventHandler, this);
         saveDefaultConfig();
         for (Player p : this.getServer().getOnlinePlayers()) {
