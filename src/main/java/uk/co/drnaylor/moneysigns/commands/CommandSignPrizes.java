@@ -23,7 +23,10 @@ public class CommandSignPrizes implements CommandExecutor {
 	
 	// Handles /sp or /signprizes.
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		
+		if (args.length == 0) {
+			//sender.sendMessage(ChatColor.GREEN + "SignPrizes info");
+			return true;
+		}
 		
 		
 		
