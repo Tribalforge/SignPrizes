@@ -14,7 +14,7 @@ commands:
     permission: moneysigns.command.msclear
     permission-message: You don't have permission to perform that command!
   signprizes:
-    alias: sp
+    aliases: [sp]
     description: Defines, modifies, and removes prize identifiers.
     usage: /signprizes <define|modify|info|remove|defineset|modifyset|definesetmoney|setinfo|setremove> <id> [...]
     permission: signprizes.command.sp
