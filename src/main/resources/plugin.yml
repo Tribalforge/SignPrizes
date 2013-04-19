@@ -19,3 +19,15 @@ commands:
     usage: /signprizes <define|modify|info|remove|defineset|modifyset|definesetmoney|setinfo|setremove> <id> [...]
     permission: signprizes.command.sp
     permission-message: You don't have permission to perform that command!
+  spdefine:
+    aliases: [signprizesdefine,spdef,signprizesdef]
+    description: Defines prize identifiers and sets.
+    usage: /spdefine <ID|set> <IDName|setName> <parameters>
+    permission: signprizes.commands.spdefine
+    permission-message: You don't have permission to perform that command!
+  spmodify:
+    aliases: [signprizesmodify,spmod,signprizesmod]
+    description: Modifies prize identifiers and sets.
+    usage: /spmodify <ID|set> <IDName|setName> <parameters>
+    permission: signprizes.commands.spmodify
+    permission-message: You don't have permission to perform that command!
