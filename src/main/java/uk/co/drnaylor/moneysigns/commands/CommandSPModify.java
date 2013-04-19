@@ -17,7 +17,9 @@ import org.bukkit.ChatColor;
  * 
  * Aliases: /signprizesmodify, /spmod, /signprizesmod
  * 
- * Permission: signprizes.id.modify
+ * Permissions:
+ * signprizes.commands.spmodify.id
+ * signprizes.commands.spmodify.set
  */
 public class CommandSPModify implements CommandExecutor {
 	
