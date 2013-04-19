@@ -11,7 +11,9 @@ import org.bukkit.ChatColor;
  * Handles the /spmodify command.
  *
  * Syntax:
- * /spmodify <id> <new timeout>
+ * /spmodify ID <id> <timeout>
+ * /spmodify set <id> <set> items:<set info...>
+ * /spmodify set <id> <set> money:<money>
  * 
  * Aliases: /signprizesmodify, /spmod, /signprizesmod
  * 
