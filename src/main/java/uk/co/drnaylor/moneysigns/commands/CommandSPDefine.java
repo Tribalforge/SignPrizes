@@ -11,7 +11,7 @@ import org.bukkit.ChatColor;
  * Handles the /spdefine command.
  *
  * Syntax:
- * /sp define <id> <timeout>
+ * /spdefine <id> <timeout>
  * 
  * Aliases: /signprizesdefine, /spdef, /signprizesdef
  * 
