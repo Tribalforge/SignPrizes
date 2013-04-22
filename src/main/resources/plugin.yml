@@ -31,3 +31,15 @@ commands:
     usage: /spmodify <ID|set> <IDName|setName> <parameters>
     permission: signprizes.commands.spmodify
     permission-message: You don't have permission to perform that command!
+  spinfo:
+    aliases: [signprizesinfo]
+    description: Gives information on prize identifiers and sets.
+    usage: /spinfo <IDName> [setName]
+    permission: signprizes.commands.spinfo
+    permission-message: You don't have permission to perform that command!
+  spremove:
+    aliases: [signprizesremove,sprem,signprizesrem]
+    description: Removes a SignPrizes ID and/or set.
+    usage: /spremove <IDName> [setName]
+    permission: signprizes.commands.spremove
+    permission-message: You don't have permission to perform that command!
