@@ -30,6 +30,11 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import uk.co.drnaylor.moneysigns.commands.Commandmsclear;
 import uk.co.drnaylor.moneysigns.commands.Commandmsid;
+import uk.co.drnaylor.moneysigns.commands.CommandSignPrizes;
+import uk.co.drnaylor.moneysigns.commands.CommandSPDefine;
+import uk.co.drnaylor.moneysigns.commands.CommandSPModify;
+import uk.co.drnaylor.moneysigns.commands.CommandSPInfo;
+import uk.co.drnaylor.moneysigns.commands.CommandSPRemove;
 
 public class MoneySigns extends JavaPlugin
 {
@@ -44,6 +49,10 @@ public class MoneySigns extends JavaPlugin
     Commandmsid mainCE;
     Commandmsclear clearCE;
 	CommandSignPrizes spCE;
+	CommandSPDefine spD;
+	CommandSPModify spM;
+	CommandSPInfo spI;
+	CommandSPRemove spR;
     
     @Override
     public void onEnable() {
@@ -61,12 +70,21 @@ public class MoneySigns extends JavaPlugin
         eventHandler = new PlayerEventHandler();
         mainCE = new Commandmsid();
         clearCE = new Commandmsclear();
-		// mainCE and clearCE will be replaced by spCE and spclearCE.
+		// mainCE and clearCE will be replaced by the new commands.
 		spCE = new CommandSignPrizes();
+		spD = new CommandSPDefine();
+		spM = new CommandSPModify();
+		spI = new CommandSPInfo();
+		spR = new CommandSPRemove();
         
         getCommand("msid").setExecutor(mainCE);
         getCommand("msclear").setExecutor(clearCE);
 		getCommand("signprizes").setExecutor(spCE);
+		getCommand("spdefine").setExecutor(spD);
+		getCommand("spmodify").setExecutor(spM);
+		getCommand("spinfo").setExecutor(spI);
+		getCommand("spremove").setExecutor(spR);
+		
         getServer().getPluginManager().registerEvents(eventHandler, this);
         saveDefaultConfig();
         for (Player p : this.getServer().getOnlinePlayers()) {
