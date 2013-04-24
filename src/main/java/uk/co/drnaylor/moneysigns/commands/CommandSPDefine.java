@@ -12,8 +12,8 @@ import org.bukkit.ChatColor;
  *
  * Syntax:
  * /spdefine ID <id> <timeout>
- * /spdefine set <id> <set> items:<set info...>
- * /spdefine set <id> <set> money:<money>
+ * /spdefine set <id> <set> <items|i> <set info...>
+ * /spdefine set <id> <set> <money|m> <money>
  * 
  * Aliases: /signprizesdefine, /spdef, /signprizesdef
  * 
@@ -73,7 +73,8 @@ public class CommandSPDefine implements CommandExecutor {
 			}
 			
 			if (args.length == 3) { // This is acceptable for defining an ID, but not a set!
-				if (args[0].equalsIgnoreCase("ID")) { // They have all the arguments necessary for making a set!
+				if (args[0].equalsIgnoreCase("ID")) { // They have all the arguments necessary for making a prize identifier!
+					
 					long timeout;
 					try {
 						timeout = Long.valueOf(args[2]);
@@ -83,18 +84,53 @@ public class CommandSPDefine implements CommandExecutor {
 						return true;
 					}
 					
+					if (MoneySigns.plugin.checkIdentifier(args[1].toLowerCase())) { // If this identifier already exists...
+						sender.sendMessage(ChatColor.YELLOW + "The prize identifier \"" + args[1].toLowerCase() + "\" already exists with a timeout of " + MoneySigns.plugin.getIdentifier(args[1].toLowerCase()) + "!");
+						sender.sendMessage(ChatColor.YELLOW + "Use \"/spmodify " + args[1].toLowerCase() + " " + timeout + " to modify it.");
+						return true;
+					}
+					
 					MoneySigns.plugin.setIdentifier(args[1].toLowerCase(), timeout);
 					MoneySigns.plugin.saveConfig();
 					sender.sendMessage(ChatColor.GREEN + "A prize identifier \"" + ChatColor.YELLOW + args[1] + ChatColor.GREEN + "\" with timeout " + ChatColor.GREEN + timeout + ChatColor.YELLOW + " has been created!");
 					return true;
 					
 				} else if (args[0].equalsIgnoreCase("set")) { // Not enough arguments for a set definition!
-					
-				}
-					
+					// /spdefine set <id> <set> <items|i> <set info...>
+					// /spdefine set <id> <set> <money|m> <money>
+					sender.sendMessage(ChatColor.RED + "Please clarify what you want to define for this set!");
+					sender.sendMessage(ChatColor.YELLOW + "\"/spdefine set " + args[1].toLowerCase() + " " + args[2].toLowerCase() + ChatColor.RED + " items " + "<parameters|inventory>" + ChatColor.YELLOW + "\"");
+					sender.sendMessage(ChatColor.YELLOW + "\"/spdefine set " + args[1].toLowerCase() + " " + args[2].toLowerCase() + ChatColor.RED + " money " + "<amount>" + ChatColor.YELLOW + "\"");
+					return true;
+				}	
 			}
 			
+			if (args.length == 4) { // STILL not enough arguments!
+				if (args[0].equalsIgnoreCase("ID")) {
+					sender.sendMessage(ChatColor.RED + "Too many arguments!");
+					sender.sendMessage("Command syntax:");
+					return true;
+				}
+				
+				if (args[0].equalsIgnoreCase("set")) {
+					if (args[3].equalsIgnoreCase("items") || args[3].equalsIgnoreCase("i")) {
+						sender.sendMessage(ChatColor.YELLOW + "No item parameters provided!");
+						sender.sendMessage(ChatColor.YELLOW + "\"/spdefine set " + args[1].toLowerCase() + " " + args[2].toLowerCase() + " items " + ChatColor.RED + "<parameters|inventory>" + ChatColor.YELLOW + "\"");
+						return true;
+					} else if (args[3].equalsIgnoreCase("money") || args[3].equalsIgnoreCase("m")) {
+						sender.sendMessage(ChatColor.YELLOW + "No money amount provided!");
+						sender.sendMessage(ChatColor.YELLOW + "\"/spdefine set " + args[1].toLowerCase() + " " + args[2].toLowerCase() + " money " + ChatColor.RED + "<amount>" + ChatColor.YELLOW + "\"");
+						return true;
+					} else {
+						sender.sendMessage(ChatColor.RED + "Invalid argument \"" + args[3] + "\", expecting \"items\" or \"money\"!");
+						return true;
+					}
+				}
+			}
 			
+			if (args.length >= 5) { // Now we may have enough arguments...
+				
+			}
 			
 			
 			
