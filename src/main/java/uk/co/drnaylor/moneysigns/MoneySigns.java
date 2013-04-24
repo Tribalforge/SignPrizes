@@ -150,12 +150,13 @@ public class MoneySigns extends JavaPlugin
         
    /**
     * Checks to see if an identifier exists.
+    * If an identifier doesn't have a timeout parameter, it's considered invalid.
     * 
     * @param id Identifier to check
     * @return true if it exists
     */
     public boolean checkIdentifier(String id) {
-	return (this.getConfig().isSet("prizes." + id));
+	return (this.getConfig().isSet("prizes." + id + ".timeout"));
     }
     
    /**
@@ -175,7 +176,7 @@ public class MoneySigns extends JavaPlugin
     * @returns Timeout in seconds
     */ 
     public long getIdentifier(String id) {
-        return getConfig().getLong("prizes." + id);
+        return getConfig().getLong("prizes." + id + ".timeout");
     } 
     
    /**
