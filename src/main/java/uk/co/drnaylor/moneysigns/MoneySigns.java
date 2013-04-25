@@ -190,12 +190,67 @@ public class MoneySigns extends JavaPlugin
         saveConfig();
     }
     
-    /**
-     * Adds or modifies a set for a prize identifier.
-     * Still under development.
-     */
-	public void setPrizeSet(String id, String set/*, parameter about item and money information*/) {
+   	/**
+	 * Gets a set's money for a prize identifier.
+	 * 
+	 * @param id Identifier
+	 * @param set Set name
+	 * @param amt The amount of money to define for the set
+	 */
+	public long setPrizeSetMoney(String id, String set) {
+		return (getConfig().getLong("prizes." + id + ".sets." + set + ".money"));
+	}
+	
+	/**
+	 * Gets a set's items for a prize identifier.
+	 * Still under development.
+	 */
+	public void setPrizeSetItems(String id, String set/*, item information*/) {
+		// This method will return an object.
 		
+	}
+    
+	/**
+	 * Adds or modifies a set's money for a prize identifier.
+	 * 
+	 * @param id Identifier
+	 * @param set Set name
+	 * @param amt The amount of money to define for the set
+	 */
+	public void setPrizeSetMoney(String id, String set, long amt) {
+		getConfig().set("prizes." + id + ".sets." + set + ".money", amt);
+		saveConfig();
+	}
+	
+	/**
+	 * Adds or modifies a set's items for a prize identifier.
+	 * Still under development.
+	 */
+	public void setPrizeSetItems(String id, String set/*, item information*/) {
+		
+	}
+	
+	/**
+	 * Checks a set's money for a prize identifier.
+	 * 
+	 * @param id Identifier
+	 * @param set Set name
+	 * @return true if the money for this set exists - otherwise false.
+	 */
+	public boolean checkPrizeSetMoney(String id, String set) {
+		return (getConfig().set("prizes." + id + ".sets." + set + ".money"));
+	}
+	
+	/**
+	 * Checks a set's items for a prize identifier.
+	 * 
+	 * @param id Identifier
+	 * @param set Set name
+	 * @return true if the item set exists - otherwise false.
+	 */
+	public boolean checkPrizeSetItems(String id, String set) {
+		return (getConfig().set("prizes." + id + ".sets." + set + ".items"));
+		return false;
 	}
     
     /**
