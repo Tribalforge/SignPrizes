@@ -6,6 +6,9 @@ import org.bukkit.command.CommandSender;
 import uk.co.drnaylor.moneysigns.MoneySigns;
 import uk.co.drnaylor.moneysigns.Util;
 import org.bukkit.ChatColor;
+import org.bukkit.inventory.ItemStack;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Handles the /spdefine command.
