@@ -109,8 +109,6 @@ public class CommandSPDefine implements CommandExecutor {
 					// /spdefine set <id> <set> <items|i> <set info...>
 					// /spdefine set <id> <set> <money|m> <money>
 					sender.sendMessage(ChatColor.RED + "Please clarify what you want to define for this set!");
-					//sender.sendMessage(ChatColor.YELLOW + "\"/spdefine set " + args[1].toLowerCase() + " " + args[2].toLowerCase() + ChatColor.RED + " items " + "<parameters|inventory>" + ChatColor.YELLOW + "\"");
-					//sender.sendMessage(ChatColor.YELLOW + "\"/spdefine set " + args[1].toLowerCase() + " " + args[2].toLowerCase() + ChatColor.RED + " money " + "<amount>" + ChatColor.YELLOW + "\"");
 					sender.sendMessage(ChatColor.YELLOW + "/spdefine set <ID name> <set name> " + ChatColor.RED + "<items|i> <inventory|(set parameters)>");
 					sender.sendMessage(ChatColor.YELLOW + "/spdefine set <ID name> <set name> " + ChatColor.RED + "<money|m> <value>");
 					return true;
@@ -126,21 +124,23 @@ public class CommandSPDefine implements CommandExecutor {
 					sender.sendMessage(ChatColor.RED + "Too many arguments!");
 					sender.sendMessage(ChatColor.YELLOW + "/spdefine ID <ID name> <timeout>");
 					return true;
+					
 				} else if (args[0].equalsIgnoreCase("set")) {
 					if (args[3].equalsIgnoreCase("items") || args[3].equalsIgnoreCase("i")) {
 						sender.sendMessage(ChatColor.YELLOW + "No item parameters provided!");
-						//sender.sendMessage(ChatColor.YELLOW + "\"/spdefine set " + args[1].toLowerCase() + " " + args[2].toLowerCase() + " items " + ChatColor.RED + "<parameters|inventory>" + ChatColor.YELLOW + "\"");
 						sender.sendMessage(ChatColor.YELLOW + "/spdefine set <ID name> <set name> " + ChatColor.RED + "<items|i> <inventory|(set parameters)>");
 						return true;
+						
 					} else if (args[3].equalsIgnoreCase("money") || args[3].equalsIgnoreCase("m")) {
 						sender.sendMessage(ChatColor.YELLOW + "No money amount provided!");
-						//sender.sendMessage(ChatColor.YELLOW + "\"/spdefine set " + args[1].toLowerCase() + " " + args[2].toLowerCase() + " money " + ChatColor.RED + "<amount>" + ChatColor.YELLOW + "\"");
 						sender.sendMessage(ChatColor.YELLOW + "/spdefine set <ID name> <set name> " + ChatColor.RED + "<money|m> <value>");
 						return true;
+						
 					} else {
 						sender.sendMessage(ChatColor.RED + "Invalid argument \"" + args[3] + "\", expecting \"items\" or \"money\"!");
 						return true;
 					}
+					
 				} else {
 					sender.sendMessage(ChatColor.RED + "\"" + args[0] + "\" isn't an acceptable argument!");
 					sender.sendMessage(ChatColor.YELLOW + "Please use \"ID\" or \"set\"!");
@@ -159,7 +159,7 @@ public class CommandSPDefine implements CommandExecutor {
 					if (args[3].equalsIgnoreCase("items") || args[3].equalsIgnoreCase("i")) {
 						
 						if (MoneySigns.plugin.checkPrizeSetItems(args[1].toLowerCase(), args[2].toLowerCase())) { // If this set's money prize already exists...
-							sender.sendMessage(ChatColor.RED + "The set items \"" + args[2].toLowerCase() + "\" in prize ID \"" + args[1].toLowerCase() + "\" already exists.");
+							sender.sendMessage(ChatColor.RED + "The set items \"" + args[2].toLowerCase() + "\" in prize ID \"" + args[1].toLowerCase() + "\" already exist.");
 							if (sender.hasPermission("signprizes.commands.spmodify.set") && sender.hasPermission("signprizes.commands.spremove.set")) {
 								sender.sendMessage(ChatColor.YELLOW + "Use \"/spmodify set " + args[1].toLowerCase() + " " + args[2].toLowerCase() + " items <parameters>\" to modify it.");
 								sender.sendMessage(ChatColor.YELLOW + "Alternatively, use \"/spremove set" + args[1].toLowerCase() + " " + args[2].toLowerCase() + "\" to remove the prize set.");
@@ -177,11 +177,14 @@ public class CommandSPDefine implements CommandExecutor {
 						List <ItemStack> items = new ArrayList <ItemStack> ();
 						
 						if (args[4].equalsIgnoreCase("inventory") || args[4].equalsIgnoreCase("inv")) {
-							// Make their inventory into an item set
+							// Make their inventory into an item set.
 							
 							
 							
-						} else { // Assume they gave us a list of numbers and stuff.
+							
+						} else {
+							// Assume they gave us a list of numbers and stuff.
+							// I have yet to finally determine how I want this syntax to look.
 							
 							
 							
@@ -195,6 +198,7 @@ public class CommandSPDefine implements CommandExecutor {
 						return true;
 						
 					} else if (args[3].equalsIgnoreCase("money") || args[3].equalsIgnoreCase("m")) {
+						// Define the money for a set.
 						
 						long amt;
 						try {
