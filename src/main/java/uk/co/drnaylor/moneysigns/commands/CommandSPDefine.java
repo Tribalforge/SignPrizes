@@ -1,14 +1,16 @@
 package uk.co.drnaylor.moneysigns.commands;
 
+import uk.co.drnaylor.moneysigns.MoneySigns;
+import uk.co.drnaylor.moneysigns.Util;
+import java.util.List;
+import java.util.ArrayList;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import uk.co.drnaylor.moneysigns.MoneySigns;
-import uk.co.drnaylor.moneysigns.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
-import java.util.List;
-import java.util.ArrayList;
+import org.bukkit.entity.Player;
+
 
 /**
  * Handles the /spdefine command.
@@ -178,8 +180,14 @@ public class CommandSPDefine implements CommandExecutor {
 						
 						if (args[4].equalsIgnoreCase("inventory") || args[4].equalsIgnoreCase("inv")) {
 							// Make their inventory into an item set.
+							if (!(sender instanceof Player)) { // We can't get this information from the console!
+								sender.sendMessage(ChatColor.RED + "The console doesn't have an inventory, so we can't make an item set from it!");
+								sender.sendMessage(ChatColor.RED + "Please provide raw item information instead.");
+								return true;
+							}
 							
-							
+							Player player = (Player) sender;
+							ItemStack[] inv = player.getInventory().getContents();
 							
 							
 						} else {
